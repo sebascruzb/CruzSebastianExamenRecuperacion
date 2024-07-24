@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CruzSebastianExamenRecuperacion.Views.SCDogPage"
+             Title="SCDogPage">
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Frame BackgroundColor="DarkSlateGray" CornerRadius="10" Padding="10" Margin="0,0,0,10">
+                <Label Text="Imagen de Perro"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               TextColor="White"
+               FontSize="Large"/>
+            </Frame>
+            <Image Source="{Binding ImageUri}"
+           HorizontalOptions="CenterAndExpand"
+           VerticalOptions="CenterAndExpand"
+           Aspect="AspectFit"
+           HeightRequest="300"/>
+            <Label Text="{Binding status}"
+           HorizontalOptions="Center"
+           VerticalOptions="Center"
+           FontSize="Medium"/>
+            <Button Text="Cargar Imagen "
+            Command="{Binding LoadDogImageCommand}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Margin="0,10,0,0"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
