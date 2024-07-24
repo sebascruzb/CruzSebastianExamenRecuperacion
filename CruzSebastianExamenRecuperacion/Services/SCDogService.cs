@@ -17,11 +17,11 @@ namespace CruzSebastianExamenRecuperacion.Services
             _httpClient = new HttpClient();
         }
 
-        public async Task<SCDog> GetDogImage()
+        public async Task<SCDog> GetDogImage(string requestUrl)
         {
             SCDog DogImage = null;
             HttpResponseMessage response;
-            string requestUrl = "https://dog.ceo/api/breed/hound/images";
+            
 
             try
             {

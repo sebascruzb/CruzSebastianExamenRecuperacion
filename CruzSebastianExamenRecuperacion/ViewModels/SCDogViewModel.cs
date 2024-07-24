@@ -23,9 +23,12 @@ namespace CruzSebastianExamenRecuperacion.ViewModels
         {
             LoadDogImageCommand = new Command(async () => await LoadDogImage());
             service = new SCDogService();
+
+            Breeds = new List<string> { "hound", "bulldog", "retriever" }; 
+            SelectedBreed = Breeds.FirstOrDefault();
         }
-        private Uri imageUri;
-        public Uri ImageUri
+        private List<Uri> imageUri;
+        public List<Uri> ImageUri
         {
             get { return imageUri; }
             set
@@ -55,21 +58,41 @@ namespace CruzSebastianExamenRecuperacion.ViewModels
         {
             get { return service; }
         }
+        public List<string> Breeds { get; set; }
+        private string selectedBreed;
+        public string SelectedBreed
+        {
+            get { return selectedBreed; }
+            set
+            {
+                if (selectedBreed != value)
+                {
+                    selectedBreed = value;
+                    NotifyPropertyChanged();
+                    LoadDogImageCommand.Execute(null);
+                }
+            }
+        }
         public ICommand LoadDogImageCommand { get; }
         private async Task LoadDogImage()
         {
-            SCDog DogImage = await Service.GetDogImage();
-            if (DogImage != null && DogImage.message.Length > 0)
+            string requestUrl = $"https://dog.ceo/api/breed/{SelectedBreed}/images";
+
+            SCDog DogImage = await Service.GetDogImage(requestUrl);
+            if (DogImage != null && DogImage.message.Length > 3)
             {
-                ImageUri = new Uri(DogImage.message[0]);
+                ImageUri = DogImage.message.Take(3).Select(url => new Uri(url)).ToList();
                 status = DogImage.status;
             }
             else
             {
-                ImageUri = new Uri("\"https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg\",\r\n" +
-                    "\"https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg\",\r\n" +
-                    "\"https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg\",");
-                status = "Unknown";
+                ImageUri = new List<Uri>
+                {
+                    new Uri("https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg"),
+                    new Uri("https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg"),
+                    new Uri("https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg")
+                };
+                Status = "Unknown";
             }
         }
     }
